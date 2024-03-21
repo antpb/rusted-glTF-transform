@@ -8,24 +8,24 @@ extern "C" {
     fn log(s: &str);
 }
 
-#[wasm_bindgen]
-pub struct VRMExtension {
-    extension_name: String,
-}
+// #[wasm_bindgen]
+// pub struct VRMExtension {
+//     extension_name: String,
+// }
 
-#[wasm_bindgen]
-impl VRMExtension {
-    #[wasm_bindgen(constructor)]
-    pub fn new(extension_name: String) -> VRMExtension {
-        VRMExtension { extension_name }
-    }
+// #[wasm_bindgen]
+// impl VRMExtension {
+//     #[wasm_bindgen(constructor)]
+//     pub fn new(extension_name: String) -> VRMExtension {
+//         VRMExtension { extension_name }
+//     }
 
-    #[wasm_bindgen(method)]
-    pub fn register(&self) {
-        // Implement the register method if needed
-        console_log(&format!("Registering extension: {}", self.extension_name));
-    }
-}
+//     #[wasm_bindgen(method)]
+//     pub fn register(&self) {
+//         // Implement the register method if needed
+//         console_log(&format!("Registering extension: {}", self.extension_name));
+//     }
+// }
 
 #[wasm_bindgen(module = "@gltf-transform/core")]
 extern "C" {
@@ -60,28 +60,29 @@ extern "C" {
     static MESHOPT_ENCODER: JsValue;
 }
 
-#[wasm_bindgen]
-pub fn create_vrm_extensions() -> Array {
-    let vrm_extension_names = &[
-        "VRMC_vrm",
-        "VRMC_vrm_animation",
-        "VRMC_node_constraint",
-        "VRMC_springBone",
-        "VRMC_materials_mtoon",
-    ];
+//@todo WIP need to figure out vrm extensions translating over.
+// #[wasm_bindgen]
+// pub fn create_vrm_extensions() -> Array {
+//     let vrm_extension_names = &[
+//         "VRMC_vrm",
+//         "VRMC_vrm_animation",
+//         "VRMC_node_constraint",
+//         "VRMC_springBone",
+//         "VRMC_materials_mtoon",
+//     ];
 
-    let vrm_extensions = Array::new();
+//     let vrm_extensions = Array::new();
 
-    for name in vrm_extension_names {
-        let extension = VRMExtension::new(name.to_string());
-        let js_extension = JsValue::from(extension);
-        vrm_extensions.push(&js_extension);
-    }
+//     for name in vrm_extension_names {
+//         let extension = VRMExtension::new(name.to_string());
+//         let js_extension = JsValue::from(extension);
+//         vrm_extensions.push(&js_extension);
+//     }
 
-    console_log(&format!("Created VRM extensions: {:?}", vrm_extensions));
+//     console_log(&format!("Created VRM extensions: {:?}", vrm_extensions));
 
-    vrm_extensions
-}
+//     vrm_extensions
+// }
 
 #[wasm_bindgen(module = "sharp")]
 extern "C" {
@@ -121,10 +122,10 @@ pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
     // Create the options object for textureCompress
     let options = js_sys::Object::new();
 
+	// @todo fix this with a separate sharp module likely.
     // #[cfg(not(target_arch = "wasm32"))]
     // {
     //     console_log("Running in Node.js environment, using sharp encoder...");
-
     //     let sharp_module = js_sys::dynamic_import("sharp").await?;
     //     let sharp_encoder = js_sys::Reflect::get(&sharp_module, &JsValue::from("default"))?;
     //     js_sys::Reflect::set(&options, &JsValue::from("encoder"), &sharp_encoder)?;
@@ -144,15 +145,16 @@ pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
     js_sys::Reflect::set(&options, &JsValue::from("resize"), &resize)?;
     console_log("Resize set to [512, 512].");
 
+	// @todo make this more configurable. Default all for now.
     // let slots_regex = js_sys::RegExp::new("/^(?!normalTexture).*$/", "i");
     // js_sys::Reflect::set(&options, &JsValue::from("slots"), &slots_regex)?;
     // console_log("Excluding normal textures from compression.");
 	
 	// log the final options
-	console_log(&format!("Options: {:?}", options));
     console_log("Applying textureCompress transformation...");
 	// document.transform(&js_texture_compress(&options));
 	document.transform(&js_texture_compress(&options)).await?;
+	// @todo look into prune an dedup later currently working but should be around some config options.
 	// document.transform(&js_prune());
     // document.transform(&js_dedup());
 
@@ -164,12 +166,6 @@ pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
 
     Ok(output)
 }
-
-// #[wasm_bindgen]
-// extern "C" {
-//     #[wasm_bindgen(js_namespace = console)]
-//     fn log(s: &str);
-// }
 
 fn console_log(message: &str) {
     log(message);
