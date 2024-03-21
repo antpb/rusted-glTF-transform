@@ -1,5 +1,8 @@
-### rusted-gltf-transform
+### rusted-gltf-transform (EXTREMELY WIP)
 rusted-gltf-transform is a Rust/WASM module that provides functionality for optimizing glTF files using the gltf-transform library. It allows you to perform various optimizations on glTF models, including texture optimization and general glTF optimization.
+
+
+![screenshot](https://3ov.xyz/wp-content/uploads/2024/03/wasm-gltf-transform-preview-scaled.jpg)
 
 ## Features
 Texture optimization: Compress textures to WebP format, resize textures, and apply quality settings.

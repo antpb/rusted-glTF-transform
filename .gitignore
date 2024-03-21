@@ -1,1 +1,23 @@
-/target
+.DS_Store
+
+# Rust build artifacts
+target/
+
+# wasm-pack build artifacts
+pkg/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Node.js dependencies (if applicable)
+node_modules/
+
+# Other generated files
+*.log
+*.bak
+*.swp

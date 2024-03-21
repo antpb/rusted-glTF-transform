@@ -33,9 +33,3 @@ demangle-name-section = true
 [package.metadata.wasm-pack.profile.profiling.wasm-bindgen]
 # Omit the `--no-demangle` flag to keep function names for profiling
 demangle-name-section = true
-
-[package.metadata.wasm-bindgen]
-# This will include the `vrmExtensions.js` file in the build output
-js_content = [
-    "js/vrmExtensions.js",
-]
