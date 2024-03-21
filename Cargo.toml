@@ -1,0 +1,41 @@
+[package]
+name = "rusted-gltf-transform"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "^0.2.92"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+serde-wasm-bindgen = "0.4"
+web-sys = { version = "0.3.69", features = ["Blob", "Url", "Window", "Worker"] }
+console_error_panic_hook = "0.1.7"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = false
+
+[package.metadata.wasm-pack.profile.profiling]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+
+[package.metadata.wasm-pack.profile.dev.wasm-bindgen]
+debug-js-glue = true
+
+[package.metadata.wasm-pack.profile.release.wasm-bindgen]
+# Omit the `--no-demangle` flag to keep function names for profiling
+demangle-name-section = true
+
+[package.metadata.wasm-pack.profile.profiling.wasm-bindgen]
+# Omit the `--no-demangle` flag to keep function names for profiling
+demangle-name-section = true
+
+[package.metadata.wasm-bindgen]
+# This will include the `vrmExtensions.js` file in the build output
+js_content = [
+    "js/vrmExtensions.js",
+]
