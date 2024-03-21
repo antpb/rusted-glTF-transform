@@ -5,11 +5,12 @@ rusted-gltf-transform is a Rust/WASM module that provides functionality for opti
 ![screenshot](https://3ov.xyz/wp-content/uploads/2024/03/wasm-gltf-transform-preview-scaled.jpg)
 
 ## Features
-Texture optimization: Compress textures to WebP format, resize textures, and apply quality settings.
-glTF optimization: Prune unused data, deduplicate data, and apply other optimizations to reduce the size of glTF files.
-WASM-based: The module is compiled to WebAssembly, allowing it to be used in web applications and native apps.
-Building the WASM Module
-To build the rusted-gltf-transform WASM module, follow these steps:
+• Texture optimization: Compress textures to WebP format, resize textures, and apply quality settings.
+• glTF optimization: Prune unused data, deduplicate data, and apply other optimizations to reduce the size of glTF files.
+• WASM-based: The module is compiled to WebAssembly, allowing it to be used in web applications and native apps.
+
+## Building the WASM Module
+To build the module, follow these steps:
 
 ## Install Rust and wasm-pack:
 Install Rust
@@ -26,7 +27,7 @@ This command will compile the Rust code to WASM and generate the necessary JavaS
 
 
 ## Using the WASM Module in a JS app
-To use the rusted-gltf-transform WASM module in your JavaScript app, follow these steps:
+To use the module in your JavaScript app, follow these steps:
 
 Install the module as a dependency in your project:
 
