@@ -14,7 +14,9 @@ To build the module, follow these steps:
 
 ## Install Rust and wasm-pack:
 Install Rust
+
 Install wasm-pack
+
 Clone the repository:
 
 `git clone https://github.com/antpb/rusted-gltf-transform.git`
