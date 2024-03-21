@@ -16,7 +16,9 @@ To build the module, follow these steps:
 Install Rust
 Install wasm-pack
 Clone the repository:
+
 `git clone https://github.com/antpb/rusted-gltf-transform.git`
+
 `cd rusted-gltf-transform`
 
 
@@ -35,7 +37,7 @@ Install the module as a dependency in your project:
 
 Import the module in your JS code:
 
-```
+```js
 import init, { optimize_textures, optimize_gltf } from 'rusted-gltf-transform';
 
 async function optimizeModel(input) {
