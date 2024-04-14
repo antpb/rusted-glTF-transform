@@ -69,7 +69,9 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
+ "serde",
  "serde-wasm-bindgen",
+ "serde_derive",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
