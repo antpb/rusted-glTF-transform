@@ -83,7 +83,7 @@ extern "C" {
 }
 
 #[wasm_bindgen]
-pub async fn add_xmp_metadata(input: Uint8Array, author: &str) -> Result<JsValue, JsValue> {
+pub async fn add_xmp_metadata(input: Uint8Array, xmp_data: JsValue) -> Result<JsValue, JsValue> {
     console_log("Starting XMP metadata addition...");
 
     let mut io = NodeIO::new();
@@ -110,33 +110,35 @@ pub async fn add_xmp_metadata(input: Uint8Array, author: &str) -> Result<JsValue
     let xmp_extension = KHRXMP::new(&document);
     console_log("XMP extension created.");
 
-    // Create Packet property.
-    console_log("Creating XMP packet...");
-    let packet = xmp_extension.create_packet();
-    console_log("XMP packet created.");
-
-
     let context = js_sys::Object::new();
     js_sys::Reflect::set(&context, &"dc".into(), &"http://purl.org/dc/elements/1.1/".into()).unwrap();
-    packet.setContext(&context);
-    console_log("Context set on XMP packet.");
 
-    let property_value = js_sys::Object::new();
-    let list = js_sys::Array::new();
-    list.push(&author.into());
-    js_sys::Reflect::set(&property_value, &"@list".into(), &list).unwrap();
-    packet.setProperty("dc:Creator", &property_value);
-    console_log("Property set on XMP packet.");
+    let xmp_data_object = js_sys::Object::from(xmp_data);
+    let keys = js_sys::Object::keys(&xmp_data_object);
+
+    let packet = xmp_extension.create_packet();
+    packet.setContext(&context);
+
+    for i in 0..keys.length() {
+        let key = keys.get(i).as_string().unwrap();
+        let value = js_sys::Reflect::get(&xmp_data_object, &key.clone().into())
+            .unwrap()
+            .as_string()
+            .unwrap();
+
+        packet.setProperty(&key, &value.into());
+    }
 
     // Assign to Document Root.
-    document.get_root().set_extension("KHR_xmp_json_ld", &packet.into());
-    console_log("XMP extension assigned to document root.");
+    document
+        .get_root()
+        .set_extension("KHR_xmp_json_ld", &packet.into());
+
+    console_log("XMP metadata addition completed.");
 
     console_log("Writing document to binary...");
     let output: JsValue = io.writeBinary(&document).await?;
     console_log("Document written to binary.");
-
-    console_log("XMP metadata addition completed.");
 
     Ok(output)
 }
@@ -164,7 +166,7 @@ pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
     resize.push(&JsValue::from(512));
     js_sys::Reflect::set(&options, &JsValue::from("resize"), &resize)?;
     console_log("Resize set to [512, 512].");
-	
+    
     console_log("Applying textureCompress transformation...");
     document.transform(&js_texture_compress(&options)).await?;
 
