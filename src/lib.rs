@@ -144,7 +144,7 @@ pub async fn add_xmp_metadata(input: Uint8Array, xmp_data: JsValue) -> Result<Js
 }
 
 #[wasm_bindgen]
-pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
+pub async fn optimize_textures(input: Uint8Array, format: &str, size: u32) -> Result<JsValue, JsValue> {
     console_log("Starting texture optimization...");
 
     let mut io = NodeIO::new();
@@ -154,18 +154,18 @@ pub async fn optimize_textures(input: Uint8Array) -> Result<JsValue, JsValue> {
 
     let options = js_sys::Object::new();
 
-    js_sys::Reflect::set(&options, &JsValue::from("targetFormat"), &JsValue::from("webp"))?;
-    console_log("Target format set to WebP.");
+    js_sys::Reflect::set(&options, &JsValue::from("targetFormat"), &JsValue::from(format))?;
+    console_log(&format!("Target format set to {}.", format));
 
     let quality = JsValue::from(70);
     js_sys::Reflect::set(&options, &JsValue::from("quality"), &quality)?;
     console_log("Quality set to 70.");
 
     let resize = js_sys::Array::new();
-    resize.push(&JsValue::from(512));
-    resize.push(&JsValue::from(512));
+    resize.push(&JsValue::from(size));
+    resize.push(&JsValue::from(size));
     js_sys::Reflect::set(&options, &JsValue::from("resize"), &resize)?;
-    console_log("Resize set to [512, 512].");
+    console_log(&format!("Resize set to [{}, {}].", size, size));
     
     console_log("Applying textureCompress transformation...");
     document.transform(&js_texture_compress(&options)).await?;
